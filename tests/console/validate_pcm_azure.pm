@@ -11,9 +11,9 @@
 #
 # Maintainer: Rodion Iafarov <riafarov@suse.com>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
 use version_utils 'is_sle';
 
