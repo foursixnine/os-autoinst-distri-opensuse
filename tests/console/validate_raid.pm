@@ -10,10 +10,11 @@
 # Summary: Simple RAID partitioning layout validation
 # Maintainer: Joaquín Rivera <jeriveramoya@suse.com>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
+use utils;
 use version_utils 'is_sle';
 use Test::Assert ':all';
 
