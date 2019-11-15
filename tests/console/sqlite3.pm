@@ -17,7 +17,7 @@
 #   * Interactive call with `expect`
 # Maintainer: Tina Müller <tina.mueller@suse.com>
 
-use base 'opensusebasetest';
+use base "consoletest";
 use strict;
 use warnings;
 use testapi;
