@@ -11,11 +11,10 @@
 #
 # Maintainer: Joaquín Rivera <jeriveramoya@suse.com>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
-
 
 sub run {
     select_console('root-console');
