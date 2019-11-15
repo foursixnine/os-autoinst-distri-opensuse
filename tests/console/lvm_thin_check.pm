@@ -11,9 +11,9 @@
 # Summary: Simple LVM thin provisioning check
 # Maintainer: Martin Loviska <mloviska@suse.com>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
 use utils;
 use y2_module_basetest 'workaround_suppress_lvm_warnings';
@@ -59,4 +59,3 @@ sub run {
 }
 
 1;
-
