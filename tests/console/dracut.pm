@@ -10,11 +10,11 @@
 # Summary: Test dracut installation and verify that it works as expected
 # Maintainer: Paolo Stivanin <pstivanin@suse.com>
 
-use base 'opensusebasetest';
-use testapi;
-use utils;
+use base "consoletest";
 use strict;
 use warnings;
+use testapi;
+use utils;
 use power_action_utils 'power_action';
 
 sub run {
