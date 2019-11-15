@@ -21,13 +21,12 @@
 # - Check registration status by checking output of "SUSEConnect --status-text"
 # Maintainer: Paolo Stivanin <pstivanin@suse.com>
 
-use base "opensusebasetest";
-
+use base "consoletest";
 use strict;
 use warnings;
 use testapi;
-use registration;
 use utils 'zypper_call';
+use registration;
 
 sub register_system_and_add_extension {
     wait_screen_change { type_string get_var "SCC_EMAIL" };
