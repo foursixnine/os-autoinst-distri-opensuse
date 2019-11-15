@@ -13,10 +13,11 @@
 # by iterating over the hash.
 # Maintainer: Oleksandr Orlov <oorlov@suse.de>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
+#use utils;
 use scheduler 'get_test_data';
 use Test::Assert ':all';
 
