@@ -19,11 +19,11 @@
 # - if not in textmode, then ensure that desktop is unlocked
 # Maintainer: Oliver Kurz <okurz@suse.de>
 
-use base "opensusebasetest";
-use testapi;
-use utils;
+use base "consoletest";
 use strict;
 use warnings;
+use testapi;
+use utils;
 use x11utils 'ensure_unlocked_desktop';
 
 sub run {
@@ -57,8 +57,9 @@ sub run {
 
 sub post_fail_hook {
     my $self = shift;
-
+    #
     $self->export_logs();
+
 }
 
 sub test_flags {
