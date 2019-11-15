@@ -15,11 +15,11 @@
 # - using libgcrypt-config, check some parameters
 # Maintainer: Paolo Stivanin <pstivanin@suse.com>
 
-use base "opensusebasetest";
-use testapi;
-use utils;
+use base "consoletest";
 use strict;
 use warnings;
+use testapi;
+use utils;
 use version_utils qw(is_sle is_opensuse);
 use registration;
 
