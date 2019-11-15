@@ -15,10 +15,11 @@
 #
 # Maintainer: Oleksandr Orlov <oorlov@suse.de>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
+use utils;
 use Test::Assert ':all';
 use scheduler 'get_test_data';
 use Data::Dumper;
