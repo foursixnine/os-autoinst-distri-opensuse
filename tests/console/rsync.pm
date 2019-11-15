@@ -17,7 +17,7 @@
 # Maintainer: Ciprian Cret <ccret@suse.com>
 
 
-use base "opensusebasetest";
+use base "consoletest";
 use strict;
 use warnings;
 use testapi;
