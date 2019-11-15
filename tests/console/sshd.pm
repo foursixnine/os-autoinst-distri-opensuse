@@ -21,9 +21,9 @@
 #   * The SCP is tested by copying various files
 # Maintainer: Pavel Dostál <pdostal@suse.cz>
 
-use warnings;
 use base "consoletest";
 use strict;
+use warnings;
 use testapi qw(is_serial_terminal :DEFAULT);
 use utils qw(systemctl exec_and_insert_password zypper_call);
 use version_utils qw(is_upgrade is_sle is_tumbleweed is_leap);
