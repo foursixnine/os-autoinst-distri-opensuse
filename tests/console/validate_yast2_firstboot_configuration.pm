@@ -12,7 +12,7 @@
 # Maintainer: Oleksandr Orlov <oorlov@suse.de>
 
 package validate_yast2_firstboot_configuration;
-use base 'opensusebasetest';
+use base "consoletest";
 use strict;
 use warnings;
 use testapi;
