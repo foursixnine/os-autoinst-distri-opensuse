@@ -10,9 +10,9 @@
 # Summary: Simple LVM partition validation
 # Maintainer: Yiannis Bonatakis <ybonatakis@suse.com>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
 use utils;
 use y2_module_basetest 'workaround_suppress_lvm_warnings';
