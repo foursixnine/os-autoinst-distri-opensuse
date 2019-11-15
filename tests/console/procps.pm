@@ -20,11 +20,11 @@
 # - Run top -b -n 1 and check
 # Maintainer: Paolo Stivanin <pstivanin@suse.com>
 
-use base 'opensusebasetest';
-use testapi;
-use utils;
+use base "consoletest";
 use strict;
 use warnings;
+use testapi;
+use utils;
 
 sub run {
     my ($self) = @_;
