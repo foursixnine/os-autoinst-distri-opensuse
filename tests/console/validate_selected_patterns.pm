@@ -14,9 +14,9 @@
 #
 # Maintainer: Yiannis Bonatakis <ybonatakis@suse.de>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
 use utils;
 
