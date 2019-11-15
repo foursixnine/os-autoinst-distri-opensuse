@@ -10,9 +10,9 @@
 # Summary: smoke test for autoyast post-installation
 # Maintainer: Yiannis Bonatakis <ybonatakis@suse.com>
 
+use base "consoletest";
 use strict;
 use warnings;
-use base "opensusebasetest";
 use testapi;
 use utils;
 use version_utils 'is_opensuse';
