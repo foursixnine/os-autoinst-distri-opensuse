@@ -11,7 +11,7 @@
 #          Test system has to be registered baremetal
 # Maintainer: Jozef Pupava <jpupava@suse.cz>
 
-use base 'opensusebasetest';
+use base "consoletest";
 use strict;
 use warnings;
 use testapi;
