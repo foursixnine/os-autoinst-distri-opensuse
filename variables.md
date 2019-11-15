@@ -114,7 +114,7 @@ STAGING | boolean | false | Indicates staging environment.
 SPECIFIC_DISK | boolean | false | Enables installation/partitioning_olddisk test module.
 SPLITUSR | boolean | false | Enables `installation/partitioning_splitusr` test module.
 SUSEMIRROR | string | | Mirror url of the installation medium.
-SYSAUTHTEST | boolean | false | Enable system authentication test (`sysauth/sssd`)
+SYSAUTHTEST | boolean | false | Enable system authentication test (`console/sysauth/sssd`)
 TEST | string | | Name of the test suite.
 TOGGLEHOME | boolean | false | Changes the state of partitioning to have or not to have separate home partition in the proposal.
 TUNNELED | boolean | false | Enables the use of normal consoles like "root-consoles" on a remote SUT while configuring the tunnel in a local "tunnel-console"
