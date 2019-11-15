@@ -15,6 +15,7 @@ use strict;
 use warnings;
 use testapi;
 use utils;
+#TODO: use base 'opensusebasetest';
 use power_action_utils 'power_action';
 
 sub run {
@@ -28,6 +29,7 @@ sub run {
     validate_script_output("dracut --list-modules 2>&1", sub { m/.*Executing: \/usr\/bin\/dracut --list-modules\n(\w+|\n|-|d+)+/ });
 
     power_action('reboot', textmode => 1);
+    #TODO: Move the wait_boot to something more generic
     $self->wait_boot;
 }
 
