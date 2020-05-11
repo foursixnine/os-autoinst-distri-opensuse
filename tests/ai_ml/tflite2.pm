@@ -17,11 +17,20 @@ use warnings;
 use base "opensusebasetest";
 use testapi;
 use utils;
+use version_utils qw(is_sle);
+use registration qw(add_suseconnect_product register_product);
 
 sub run {
     my ($self) = @_;
 
     $self->select_serial_terminal;
+
+    if (is_sle '>=15') {
+        assert_script_run 'source /etc/os-release';
+        add_suseconnect_product('PackageHub', undef, undef, undef, 300, 1);
+        add_suseconnect_product('sle-module-desktop-applications');
+    }
+
     # Install required software
     zypper_call('in tensorflow2-lite python3-Pillow');
 

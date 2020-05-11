@@ -17,6 +17,8 @@ use warnings;
 use base "consoletest";
 use testapi;
 use utils;
+use version_utils qw(is_sle);
+use registration qw(add_suseconnect_product);
 
 sub armnn_get_images {
     assert_script_run('mkdir -p armnn/data');
@@ -53,6 +55,14 @@ sub run {
     my $armnn_backends = get_var("ARMNN_BACKENDS");          # Comma-separated list of armnn backends to test explicitly. E.g "CpuAcc,GpuAcc"
 
     $self->select_serial_terminal;
+
+    if (is_sle '>=15') {
+        assert_script_run 'source /etc/os-release';
+        add_suseconnect_product('PackageHub', undef, undef, undef, 300, 1);
+        add_suseconnect_product('sle-module-desktop-applications');
+        add_suseconnect_product('sle-module-development-tools');
+    }
+
     zypper_call $armnn_backends =~ /GpuAcc/ ? 'in armnn-opencl' : 'in armnn';
 
     select_console 'user-console';
