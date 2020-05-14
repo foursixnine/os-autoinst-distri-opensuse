@@ -42,7 +42,7 @@ sub run {
     assert_script_run('unzip ~/data/ai_ml/models/mobilenet_v1_1.0_224_quant_and_labels.zip');
 
     # Run the test
-    assert_script_run("python3 ~/data/ai_ml/label_image.py --image ~/data/ai_ml/images/White_shark.jpg --model_file mobilenet_v1_1.0_224_quant.tflite --label_file labels_mobilenet_quant_v1_224.txt | tee /dev/$serialdev | head -n1", sub { m/great white shark$/ });
+    script_output("python3 ~/data/ai_ml/label_image.py --image ~/data/ai_ml/images/White_shark.jpg --model_file mobilenet_v1_1.0_224_quant.tflite --label_file labels_mobilenet_quant_v1_224.txt | tee /dev/$serialdev | head -n1", sub { m/great white shark$/ });
 
     # Clean-up
     assert_script_run('popd && rm -rf tflite2_tests');
