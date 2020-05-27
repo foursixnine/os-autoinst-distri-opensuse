@@ -1219,4 +1219,3 @@ sub test_flags {
     return get_var('PUBLIC_CLOUD') ? {no_rollback => 1} : {};
 }
 
-1;
