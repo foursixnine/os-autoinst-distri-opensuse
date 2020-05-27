@@ -54,7 +54,7 @@ test-compile: check-links
 
 .PHONY: test-compile-changed
 test-compile-changed: os-autoinst/
-	export PERL5LIB=${PERL5LIB_} ; for f in `git diff --name-only | grep '.pm'` ; do perl -c $$f 2>&1 | grep -v " OK$$" && exit 2; done ; true
+	export PERL5LIB=${PERL5LIB_} ; for f in `git diff --name-only $$(git merge-base master HEAD) | grep '.pm'` ; do perl -c $$f 2>&1 | grep -v " OK$$" && exit 2; done ; true
 
 .PHONY: test-yaml-valid
 test-yaml-valid:
@@ -111,7 +111,7 @@ test-spec:
 test-static: tidy-check test-yaml-valid test-modules-in-yaml-schedule test-merge test-dry test-no-wait_idle test-deleted-renamed-referenced-files detect-nonexistent-testdata test-unused-modules-changed test-soft_failure-no-reference test-spec test-invalid-syntax
 .PHONY: test
 ifeq ($(TESTS),compile)
-test: test-compile
+test: test-compile-changed
 else ifeq ($(TESTS),static)
 test: test-static
 else ifeq ($(TESTS),unit)
