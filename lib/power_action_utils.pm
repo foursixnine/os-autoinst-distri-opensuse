@@ -257,12 +257,18 @@ sub power_action {
         select_console $args{textmode} ? 'root-console' : 'x11';
     }
     unless ($args{observe}) {
+        record_info("Hmm");
         if ($args{textmode}) {
             type_string "$action\n";
         }
         else {
-            if ($action eq 'reboot') {
+            record_info("Hmm?");
+            if ($action eq 'reboot' && !$args{textmode}) {
                 reboot_x11;
+            } elsif ($action eq 'reboot' && $args{textmode}) {
+                select_console("root-console");
+                    record_info("Just in case!");
+                    type_string "$action\n";
             }
             elsif ($action eq 'poweroff') {
                 if (check_var('BACKEND', 's390x')) {
@@ -276,6 +282,8 @@ sub power_action {
             }
         }
     }
+    record_info("Just in case!");
+    type_string "$action\n";
     my $soft_fail_data;
     my $shutdown_timeout = 60;
     if (is_sle('15-sp1+') && check_var('DESKTOP', 'textmode') && ($action eq 'poweroff')) {
