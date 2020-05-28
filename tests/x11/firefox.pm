@@ -27,10 +27,11 @@ sub run() {
     $self->start_firefox;
     wait_still_screen;
     # we have poor performance on LIVETEST, use assert_and_click here
-    if (is_tumbleweed && get_var("LIVETEST")) {
+    if (is_tumbleweed) {
         send_key_until_needlematch('firefox-help-menu', 'alt', 4, 10);    # show menu bar
-        assert_and_click 'firefox-help-menu';
-        assert_and_click 'firefox-help-about';
+        send_key "h";
+        assert_screen 'firefox-help-menu';
+        send_key "a";
     }
     else {
         send_key "alt-h";
