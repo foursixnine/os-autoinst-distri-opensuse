@@ -23,7 +23,7 @@ use version_utils 'is_tumbleweed';
 
 sub run() {
     my ($self) = shift;
-
+    my $is_livetest = get_var("LIVETEST");
     $self->start_firefox;
     wait_still_screen;
     # we have poor performance on LIVETEST, use assert_and_click here
@@ -45,7 +45,7 @@ sub run() {
     assert_screen 'firefox-html-test';
 
     send_key "alt-f4";
-    assert_screen [qw(firefox-save-and-quit generic-desktop)];
+    assert_screen([qw(firefox-save-and-quit generic-desktop)], ($is_livetest) ? 30 : 60);
     if (match_has_tag 'firefox-save-and-quit') {
         # confirm "save&quit"
         send_key "ret";
