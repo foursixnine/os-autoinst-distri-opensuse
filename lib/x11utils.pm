@@ -106,8 +106,15 @@ sub ensure_unlocked_desktop {
             record_info('Guest disabled display', 'Might be consequence of bsc#1168979');
         }
         if (match_has_tag('authentication-required-user-settings') || match_has_tag('authentication-required-modify-system')) {
-            type_password;
-            assert_and_click "authenticate";
+            record_info("Loop $counter","Next loop ($counter), Generic desktop didn't match");
+            wait_still_screen(2);
+            if ($counter eq 9) {
+                record_soft_failure "bsc#1168979 - screenbuffer not updated after screen is locked";
+                next;
+            } else {
+                type_password;
+                assert_and_click "authenticate";
+            }
         }
         if ((match_has_tag 'displaymanager-password-prompt') || (match_has_tag 'screenlock-password')) {
             if ($password ne '') {
