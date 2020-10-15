@@ -31,7 +31,7 @@ use utils 'zypper_call';
 
 sub run {
     my $self = shift;
-    $self->select_serial_terminal;
+    select_console 'root-console';
 
     zypper_call 'in vsftpd expect';
     # export slenkins variables
@@ -50,8 +50,8 @@ sub run {
 
 sub post_fail_hook {
     my ($self) = @_;
-    upload_logs('run.log');
-    $self->SUPER::post_fail_hook;
+    wait_serial('done_debugging', 3600);
+    #$self->SUPER::post_fail_hook;
 }
 
 1;

@@ -190,7 +190,8 @@ sub test8 {
 
 sub run {
     my $self = shift;
-    $self->select_serial_terminal;
+    #$self->select_serial_terminal;
+    select_console 'root-console';
 
     # Check Service State, enable it if necessary, set default zone to public
     pre_test;
@@ -221,4 +222,8 @@ sub run {
 
 }
 
+sub post_fail_hook {
+    wait_serial('done_debugging', 3600);
+    upload_logs('/tmp/logs.tar.bz2');
+}
 1;
