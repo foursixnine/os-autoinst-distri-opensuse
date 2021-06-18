@@ -47,7 +47,7 @@ sub run {
     send_key "alt-f4";
 
     # avoid async keyring popups
-    x11_start_program('google-chrome --password-store=basic', target_match => 'chrome-default-browser-query');
+    x11_start_program('google-chrome --password-store=basic', target_match => 'chrome-default-browser-query'); 
     # we like to preserve the privacy of the non-human openqa workers ;-)
     assert_and_click 'chrome-do_not_send_data' if match_has_tag 'chrome-default-browser-query-send-data';
     assert_and_click 'chrome-default-browser-query';
@@ -60,6 +60,8 @@ sub run {
     assert_screen 'google-chrome-about', 15;
 
     send_key "alt-f4";
+    x11_start_program('google-chrome --password-store=basic --incognito', target_match => 'chrome-default-browser-query'); 
+
 }
 
 1;
