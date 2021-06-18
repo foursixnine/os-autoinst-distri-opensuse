@@ -60,6 +60,8 @@ sub run {
     assert_screen 'google-chrome-about', 15;
 
     send_key "alt-f4";
+    
+    # start chrome in incognito mode 
     x11_start_program('google-chrome --password-store=basic --incognito', target_match => 'chrome-default-browser-query'); 
 
 }
