@@ -1647,8 +1647,8 @@ sub script_run_interactive {
         do {
             $output = wait_serial(\@words, $timeout) || die "No message matched!";
 
-            last if ($output =~ /($endmark)0$/m);    # return value is 0
-            die  if ($output =~ /$endmark/m);        # other return values
+            last                                        if ($output =~ /($endmark)0$/m);    # return value is 0
+            die "Got: '[$output] instead of [$endmark]" if ($output =~ /$endmark/m);        # other return values
 
             for my $i (@$scan) {
                 next if ($output !~ $i->{prompt});
