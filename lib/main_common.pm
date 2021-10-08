@@ -1061,10 +1061,10 @@ sub load_console_server_tests {
         loadtest "console/php_pcre" if is_sle;
         # TODO test on SLE https://progress.opensuse.org/issues/31972
         loadtest "console/mariadb_odbc" if is_opensuse;
-        loadtest "console/php7";
-        loadtest "console/php7_mysql";
-        loadtest "console/php7_postgresql";
-        loadtest "console/php7_timezone";
+        loadtest "console/php";
+        loadtest "console/php_mysql";
+        loadtest "console/php_postgresql";
+        loadtest "console/php_timezone";
     }
     # TODO test on openSUSE https://progress.opensuse.org/issues/31972
     loadtest "console/apache_ssl" if is_sle;

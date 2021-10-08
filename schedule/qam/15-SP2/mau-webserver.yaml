@@ -43,9 +43,9 @@ schedule:
 - console/shibboleth
 - console/postgresql_server
 - console/mariadb_srv
-- console/php7
-- console/php7_mysql
-- console/php7_postgresql
+- console/php
+- console/php_mysql
+- console/php_postgresql
 - console/sqlite3
 - console/zypper_lifecycle
 - console/orphaned_packages_check
