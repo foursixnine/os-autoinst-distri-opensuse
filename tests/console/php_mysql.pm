@@ -1,6 +1,6 @@
 # SUSE's openQA tests
 #
-# Copyright 2017-2020 SUSE LLC
+# Copyright 2017-2021 SUSE LLC
 # SPDX-License-Identifier: FSFAP
 
 # Package: php7-mysql mysql sudo
@@ -28,14 +28,17 @@ use testapi;
 use utils;
 use version_utils 'is_sle';
 use registration qw(add_suseconnect_product get_addon_fullname);
-use apachetest;
+use apachetest qw(get_php_version get_php_mode setup_apache2 test_mysql);
 
 sub run {
     my $self = shift;
     $self->select_serial_terminal;
-    setup_apache2(mode => 'PHP7');
+
+    my $selected_php = get_php_version;
+    setup_apache2(mode => get_php_mode);
+
     # install requirements
-    zypper_call "in php7-mysql mysql sudo";
+    zypper_call "in $selected_php-mysql mysql sudo";
 
     systemctl 'restart mysql', timeout => 300;
 

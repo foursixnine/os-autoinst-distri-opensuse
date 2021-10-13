@@ -12,15 +12,18 @@
 # Maintainer: Pavel Dostál <pdostal@suse.cz>
 
 use base "consoletest";
-use testapi;
 use strict;
 use warnings;
+use testapi;
 use utils;
 use version_utils qw(is_sle is_jeos);
+use apachetest qw(get_php_version);
 
 sub run {
     my ($self) = @_;
     $self->select_serial_terminal;
+
+    my $selected_php = get_php_version;
 
     # installation of docs and manpages is excluded in zypp.conf
     # enable full package installation, and clean up previous apache2 deployment
@@ -52,12 +55,12 @@ sub run {
     }
 
     # Following the reproducer of bug#1174667, the regression was detected when php7 module enabled and when stopping or reloading apache service
-    assert_script_run('a2enmod php7');
+    assert_script_run("a2enmod $selected_php");
     systemctl 'stop apache2';
     systemctl 'start apache2';
     systemctl 'reload apache2';
     systemctl 'status apache2';
-    assert_script_run 'a2dismod php7';
+    assert_script_run "a2dismod $selected_php";
 
     # In order to avoid future conflicts, apache2-mod_php72 php72-curl and their dependencies are removed
     if (get_var('SCC_ADDONS') != 'ltss' && is_sle('<=12-SP5')) {

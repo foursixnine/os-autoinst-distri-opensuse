@@ -1,6 +1,6 @@
 # SUSE's openQA tests
 #
-# Copyright 2017-2019 SUSE LLC
+# Copyright 2017-2021 SUSE LLC
 # SPDX-License-Identifier: FSFAP
 
 # Package: php7 php7-pgsql postgresql*-contrib sudo unzip
@@ -34,17 +34,18 @@ use strict;
 use warnings;
 use testapi;
 use utils 'zypper_call';
-use apachetest qw(setup_apache2 setup_pgsqldb test_pgsql destroy_pgsqldb postgresql_cleanup);
+use apachetest;
 use Utils::Systemd 'systemctl';
 
 sub run {
     my $self = shift;
     $self->select_serial_terminal;
-    # ensure apache2 + php7 installed and running
-    setup_apache2(mode => 'PHP7');
+    # ensure apache2 + php is installed and running
+    my $selected_php = get_php_version;
+    setup_apache2(mode => get_php_mode);
 
     # install requirements, all postgresql versions to test db upgrade if there are multiple versions
-    zypper_call 'in php7-pgsql postgresql*-contrib sudo unzip';
+    zypper_call "in $selected_php-pgsql postgresql*-contrib sudo unzip";
 
     # start postgresql service
     systemctl 'start postgresql';

@@ -20,16 +20,30 @@ use testapi;
 use utils;
 use version_utils qw(is_sle is_leap check_version is_tumbleweed);
 
-our @EXPORT = qw(setup_apache2 setup_pgsqldb destroy_pgsqldb test_pgsql test_mysql postgresql_cleanup);
-# Setup apache2 service in different mode: SSL, NSS, NSSFIPS, PHP7
+our @EXPORT = qw(
+  get_php_mode
+  get_php_version
+  postgresql_cleanup
+  setup_apache2
+  setup_pgsqldb destroy_pgsqldb
+  test_mysql
+  test_pgsql
+);
+# Setup apache2 service in different mode: SSL, NSS, NSSFIPS, PHP
 # Example: setup_apache2(mode => 'SSL');
+
+my %php_version = (
+    PHP5 => 'php5',    #this might be deadcode but who knows?
+    PHP7 => 'php74',   # use the highest available php version
+    PHP8 => 'php8'
+);
 
 =head2 setup_apache2
 
  setup_apache2(mode => $mode);
 
 Setup Apache service in different mode.
-Possible values for C<$mode> are: SSL, NSS, NSSFIPS and PHP7
+Possible values for C<$mode> are: SSL, NSS, NSSFIPS and PHP
 
  setup_apache2(mode => 'SSL');
 
@@ -39,6 +53,8 @@ sub setup_apache2 {
     my $mode = uc $args{mode} || "";
     # package hostname is available on sle15+ and openSUSE, on <15 it's net-tools
     my @packages = qw(apache2 /bin/hostname);
+
+    record_info("$mode", "Apache was set up in $mode");
 
     # For gensslcert
     push @packages, 'apache2-utils' if is_tumbleweed;
@@ -50,20 +66,15 @@ sub setup_apache2 {
         push @packages, qw(apache2-mod_nss mozilla-nss-tools expect);
     }
 
-    if ($mode eq "PHP7") {
-        push @packages, qw(apache2-mod_php7 php7);
-        push @packages, qw(php7-cli) unless (is_sle || is_leap);
+    if ($mode =~ m/PHP[78]/) {
+        my $selected_php = get_php_version($mode);
+        push @packages, qq(apache2-mod_$selected_php $selected_php);
+        push @packages, qq($selected_php-cli) unless (is_sle || is_leap);
         zypper_call("rm -u apache2-mod_php5 php5", exitcode => [0, 104]);
     }
 
     # Make sure the packages are installed
     zypper_call("--no-gpg-checks in @packages");
-
-    # Enable php7
-    if ($mode eq "PHP7") {
-        assert_script_run 'a2enmod -d php5';
-        assert_script_run 'a2enmod php7';
-    }
 
     # Enable the ssl
     if ($mode eq "SSL") {
@@ -138,9 +149,50 @@ sub setup_apache2 {
     my $curl_option = ($mode =~ m/SSL|NSS/) ? '-k https' : 'http';
     assert_script_run "curl $curl_option://localhost/hello.html | grep 'Hello Linux'";
 
-    if ($mode =~ /PHP5|PHP7/) {
+    if ($mode =~ m/PHP/) {
         assert_script_run "curl --no-buffer http://localhost/index.php | grep \"\$(uname -s -n -r -v -m)\"";
     }
+}
+
+=head2 get_php_version
+  get_php_version [PHP8]
+
+Returns the string for the php package, if no "mode" is given, falls back to OS version
+
+=cut
+sub get_php_version {
+    my ($this_version) = @_;
+    if (!defined $this_version) {
+        if (is_leap('>=15.4') || is_tumbleweed || is_sle('>=15-sp4')) {
+            $this_version = 'PHP8';
+        } elsif (get_var('SCC_ADDONS') eq 'ltss' && is_sle('<=12-SP5')) {
+            $this_version = 'PHP5';
+        } else {
+            $this_version = 'PHP7';
+        }
+    }
+
+    return $php_version{$this_version};
+
+}
+
+=head2 get_php_mode
+  get_php_mode;
+
+Returns the string for the corresponding 'mode' to be used with 'setup_apache2' defaults to PHP7
+
+=cut
+sub get_php_mode {
+    my $this_version = 'PHP7';
+    if (is_leap('>=15.4') || is_tumbleweed || is_sle('15-sp4+')) {
+        $this_version = 'PHP8';
+    } elsif (get_var('SCC_ADDONS') eq 'ltss' && is_sle('<=12-SP5')) {
+        $this_version = 'PHP5';
+    } else {
+        $this_version = 'PHP7';
+    }
+
+    return $this_version;
 }
 
 =head2 setup_pgsqldb

@@ -1,6 +1,6 @@
 # SUSE's openQA tests
 #
-# Copyright 2017 SUSE LLC
+# Copyright 2017-2021 SUSE LLC
 # SPDX-License-Identifier: FSFAP
 
 # Package: php7 php-json
@@ -16,16 +16,17 @@ use strict;
 use warnings;
 use utils;
 use testapi;
-use apachetest;
+use apachetest qw(setup_apache2 get_php_version get_php_mode);
 
 sub run {
     my $self = shift;
     $self->select_serial_terminal;
-    setup_apache2(mode => 'PHP7');
-    assert_script_run('curl http://localhost/index.php | tee /tmp/tests-console-php7.txt');
-    assert_script_run('grep "PHP Version 7" /tmp/tests-console-php7.txt');
 
-    # test function provided by external module (php7-json RPM)
+    my $selected_php = get_php_version;
+    setup_apache2(mode => get_php_mode);
+    assert_script_run('curl http://localhost/index.php | tee /tmp/tests-console-php7.txt');
+
+    # test function provided by external module (php-json RPM)
     zypper_call 'in php-json';
     assert_script_run('php -r \'echo json_encode(array("foo" => true))."\\n";\' | grep :true');
 

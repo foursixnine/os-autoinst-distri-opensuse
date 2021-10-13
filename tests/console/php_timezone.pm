@@ -13,7 +13,7 @@ use strict;
 use warnings;
 use utils;
 use testapi;
-use apachetest;
+use apachetest qw(get_php_version get_php_mode setup_apache2);
 
 my $date_time = "a";
 my $php_time = "b";
@@ -28,7 +28,9 @@ sub run {
     #Preparation
     my $self = shift;
     $self->select_serial_terminal;
-    setup_apache2(mode => 'PHP7');
+
+    my $selected_php = get_php_version;
+    setup_apache2(mode => get_php_mode);
 
     #Save current timezone
     my $current_timezone = script_output 'timedatectl | grep "Time zone" | awk \'{print $3}\' ';

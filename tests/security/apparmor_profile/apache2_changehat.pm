@@ -46,6 +46,7 @@ use testapi;
 use utils;
 use version_utils qw(is_sle is_tumbleweed);
 use registration qw(add_suseconnect_product register_product);
+use apachetest qw(get_php_version);
 
 sub run {
     my ($self) = shift;
@@ -80,7 +81,9 @@ sub run {
         add_suseconnect_product("sle-module-web-scripting", "$version", "$arch", "$params", "$timeout");
         add_suseconnect_product("sle-module-legacy", "$version", "$arch", "$params", "$timeout");
     }
-    zypper_call("in apache2 apache2-mod_apparmor apache2-mod_php7 php7 php7-mysql");
+
+    my $selected_php = get_php_version;
+    zypper_call("in apache2 apache2-mod_apparmor apache2-mod_$selected_php $selected_php $selected_php-mysql");
 
     # Restart apparmor
     systemctl("restart apparmor");
