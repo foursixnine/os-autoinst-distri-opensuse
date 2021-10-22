@@ -29,24 +29,27 @@ use utils;
 use version_utils 'is_sle';
 
 sub gpg_test {
-    my ($key_size, $gpg_ver) = @_;
+    my ($key_size, $gpg_ver, $key_algo, $subkey_algo) = @_;
 
     my $name = "SUSE Tester";
     my $username = $name . " " . $key_size;
     my $passwd = "This_is_a_test_case";
     my $email = "user\@suse.de";
     my $egg_file = 'egg';
+    my $key_algo //= 'default'
+    my $subkey_algo //= 'default'
 
     # GPG Key Generation
 
     # Generating key pair
     if ($gpg_ver ge 2.1) {
         # Preparing a config file for gpg --batch option
+
         assert_script_run(
             "echo \"\$(cat <<EOF
-Key-Type: default
+Key-Type: $key_algo
 Key-Length: $key_size
-Subkey-Type: default
+Subkey-Type: $subkey_algo
 Subkey-Length: $key_size
 Name-Real: $username
 Name-Email: $email
@@ -56,7 +59,7 @@ EOF
         );
         assert_script_run("cat $egg_file");
 
-        script_run("gpg2 -vv --batch --full-generate-key $egg_file &> /dev/$serialdev", 0);
+        script_run("gpg2 -vv --batch --quick-gen-key $egg_file &> /dev/$serialdev", 0);
     }
     else {
         # Batch mode does not work in gpg version < 2.1. Workaround like using
@@ -158,13 +161,19 @@ sub run {
 
     # GPG key generation and basic function testing with differnet key lengths
     # RSA keys may be between 1024 and 4096 only currently
+    my $key_algo = (is_tumbleweed)? 'RSA' : undef;
+    my $subkey_algo = (is_tumbleweed)? 'RSA' : undef;
     foreach my $len ('1024', '2048', '3072', '4096') {
-        gpg_test($len, $gpg_version);
+        gpg_test($len, $gpg_version, $key_algo, $subkey_algo);
     }
 }
 
 sub test_flags {
     return {fatal => 0};
+}
+
+sub post_fail_hook {
+    wait_serial("investigation-done", 3600);
 }
 
 1;
