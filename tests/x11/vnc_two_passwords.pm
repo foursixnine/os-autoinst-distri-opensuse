@@ -103,6 +103,8 @@ sub run {
     record_info 'Setup VNC';
     select_console('root-console');
     zypper_call('in tigervnc xorg-x11-Xvnc xev');
+    my $package = "http://download.suse.de/ibs/home:/jtorres:/branches:/OBS_Maintained:/tigervnc/SUSE_SLE-15-SP4_GA/s390x/tigervnc-1.10.1-150400.5.6.1.s390x.rpm";
+    zypper_call("--no-gpg-checks in --allow-unsigned-rpm $package");
     start_vnc_server;
 
     # open xterm for xev
