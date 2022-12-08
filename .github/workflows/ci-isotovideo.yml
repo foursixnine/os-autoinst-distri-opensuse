@@ -6,10 +6,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: "CI: Running isotovideo test"
+    container:
+      image: perldocker/perl-tester:5.32
     steps:
     - uses: actions/checkout@v3
     - name: Run isotovideo tests
-      run: make test-isotovideo
+      run: |
+        make test-isotovideo
     - name: Error in isotovideo
       if: ${{ failure() }}
       run: echo 'isotovideo failed, something modified the default schedule or the output; run locally to find out more.' && exit 1

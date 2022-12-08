@@ -165,4 +165,5 @@ test-code-style:
 
 .PHONY: test-isotovideo
 test-isotovideo:
+	cpanm -nq --installdeps .
 	tools/test_isotovideo
