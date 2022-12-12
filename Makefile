@@ -166,4 +166,6 @@ test-code-style:
 .PHONY: test-isotovideo
 test-isotovideo:
 	cpanm -nq --installdeps .
-	tools/test_isotovideo
+	command -V docker
+	command -V podman
+	cre=$$(command -v docker || command -v podman) tools/test_isotovideo 
