@@ -15,6 +15,10 @@ use utils;
 
 use base 'consoletest';
 
+my $networkd_defaults = {
+    timeout => 60, fail_message => "Looks like commmand took too long"
+};
+
 =head2 assert_script_run_container
 
  assert_script_run_container($machine, $script);
@@ -25,7 +29,7 @@ Run C<$script> in the systemd-nspawn container called C<$machine>.
 
 sub assert_script_run_container {
     my ($self, $machine, $script) = @_;
-    assert_script_run("systemd-run -tM $machine /bin/bash -c \"$script\"");
+    assert_script_run("systemd-run -tM $machine /bin/bash -c \"$script\"", $networkd_defaults);
 }
 
 =head2 script_run_container
@@ -38,7 +42,7 @@ Run C<$script> in the systemd-nspawn container called C<$machine>.
 
 sub script_run_container {
     my ($self, $machine, $script) = @_;
-    return script_run("systemd-run -tM $machine /bin/bash -c \"$script\"");
+    return script_run("systemd-run -tM $machine /bin/bash -c \"$script\"", $networkd_defaults);
 }
 
 =head2 start_nspawn_container
@@ -144,10 +148,9 @@ sub wait_for_networkd {
     $self->assert_script_run_container($machine, "ip a");
     $self->assert_script_run_container($machine, "networkctl");
     # wait until network is configured
-    $self->assert_script_run_container($machine, "for i in {1..20} ; do networkctl | grep $netif.*configured && break ; sleep 1 ; done");
-    $self->assert_script_run_container($machine, "networkctl");
-    $self->assert_script_run_container($machine, "networkctl | grep $netif.*configured");
-    $self->assert_script_run_container($machine, "networkctl status");
+    $self->assert_script_run_container($machine, "for i in {1..20} ; do networkctl --no-pager --no-legend | grep $netif.*configured && break ; sleep 1 ; done");
+    $self->assert_script_run_container($machine, "networkctl --no-pager --no-legend | grep $netif.*configured");
+    $self->assert_script_run_container($machine, "networkctl --no-pager --no-legend status");
 }
 
 =head2 export_container_journal
