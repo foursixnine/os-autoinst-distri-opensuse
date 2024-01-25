@@ -22,7 +22,6 @@ schedule:
   - installation/disable_grub_timeout
   - installation/start_install
   - installation/await_install
-  - installation/logs_from_installation_system
   - installation/reboot_after_installation
   - installation/handle_reboot
   - installation/first_boot
@@ -30,8 +29,8 @@ schedule:
   - console/prepare_test_data
   - console/force_scheduled_tasks
   - console/consoletest_setup
-  - console/verify_network
   - console/validate_installed_patterns
+  - kernel/update_kernel
   - console/mdadm
   - console/coredump_collect
 test_data:
