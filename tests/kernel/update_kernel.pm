@@ -382,7 +382,8 @@ sub install_kotd {
     remove_kernel_packages;
     zypper_ar($repo, name => 'KOTD', priority => 90, no_gpg_check => 1);
     my $kernel_flavor = get_kernel_flavor;
-    zypper_call("in -l ${kernel_flavor} kernel-devel");
+    my $kernel_devel = get_var('WITHOUT_KOTD_DEVEL') ? '' : 'kernel-devel';
+    zypper_call("in -l ${kernel_flavor} ${kernel_devel}");
 }
 
 sub boot_to_console {
