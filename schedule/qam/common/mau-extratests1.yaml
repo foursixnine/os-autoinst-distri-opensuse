@@ -9,6 +9,7 @@ schedule:
   - console/check_os_release
   - console/ping
   - console/openvswitch
+  - console/dpdk
   - console/pam
   - console/sshd
   - console/update_alternatives
@@ -81,7 +82,6 @@ conditional_schedule:
       15-SP5:
         - console/firewalld
         - console/lshw
-        - console/dpdk
       15-SP4:
         - console/firewalld
         - console/lshw
