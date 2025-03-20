@@ -24,6 +24,7 @@ sub test_kr {
     # turn on the hangul mode
     assert_and_click 'ibus-indicator';
     assert_and_click 'ibus-korean-switch-hangul';
+    wait_still_screen 1;
     type_string_slow 'dkssudgktpdy';
     send_key 'ret';
     assert_screen 'ibus_kr_hi';
