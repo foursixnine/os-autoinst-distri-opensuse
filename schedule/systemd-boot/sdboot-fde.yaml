@@ -6,4 +6,5 @@ description: >
 schedule:
     - boot/boot_to_desktop
     - console/sdbootutil_enroll
+    - console/sdbootutil_smoke
     - shutdown/shutdown
