@@ -26,6 +26,8 @@ sub run {
         60
     );
 
+    upload_logs("enrollment.log");
+
     set_var("RUNTIME_TPM_ENROLLED", 1);
     power_action('reboot', textmode => 1, keepconsole => 1);
     shift->wait_boot(bootloader_time => 300);
