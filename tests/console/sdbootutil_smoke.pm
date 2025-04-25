@@ -17,9 +17,10 @@ sub run {
     my $self = shift;
     my $bootloader = get_required_var('BOOTLOADER');
     select_console 'root-console';
-    assert_script_run 'sdbootutil get-timeout | grep 42';
     assert_script_run 'sdbootutil set-timeout 100';
     assert_script_run 'sdbootutil get-timeout | grep 100';
+    assert_script_run 'sdbootutil set-timeout 42';
+    assert_script_run 'sdbootutil get-timeout | grep 42';
     assert_script_run 'sdbootutil get-default| grep $(uname -r)';
     validate_script_output 'sdbootutil bootloader', qr/$bootloader/;
     assert_script_run 'sdbootutil -vv is-installed';
