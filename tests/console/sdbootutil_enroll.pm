@@ -16,7 +16,7 @@ use power_action_utils 'power_action';
 sub run {
     select_console 'root-console';
     script_run_interactive(
-        "sdbootutil enroll --method tpm2;",
+        "sdbootutil -vv enroll --method tpm2 |& tee enrollment.log",
         [
             {
                 prompt => qr/Password for.*/m,
