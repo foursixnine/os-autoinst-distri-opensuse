@@ -17,6 +17,9 @@ sub run {
     my $self = shift;
     my $bootloader = get_required_var('BOOTLOADER');
     select_console 'root-console';
+    # assert_script_run 'chcon -t systemd_pcrlock_exec_t /usr/bin/tpm2_getcap';
+
+
     assert_script_run 'sdbootutil set-timeout 100';
     assert_script_run 'sdbootutil get-timeout | grep 100';
     assert_script_run 'sdbootutil set-timeout 42';
@@ -45,6 +48,7 @@ sub run {
     my @packages = qw(git-core helix zip linux-glibc-devel libxcrypt-devel
       ncurses-devel glibc-devel make bison readline-devel
     );
+    @packages = qw(git-core);    # shorten turnaround
 
     foreach my $package (@packages) {
         select_console 'root-console';

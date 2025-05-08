@@ -15,6 +15,11 @@ use power_action_utils 'power_action';
 
 sub run {
     select_console 'root-console';
+    my $repo = "https://download.opensuse.org/repositories/home:/jsegitz:/branches:/security:/SELinux_1241964/openSUSE_Factory/home:jsegitz:branches:security:SELinux_1241964.repo";
+    zypper_ar($repo, priority => 90, no_gpg_check => 1);
+    zypper_call("ref");
+    zypper_call("in --allow-vendor-change selinux-policy");
+    script_run("timeout 1780 restorecon -R /", timeout => 1800);
     script_run_interactive(
         "sdbootutil -vv enroll --method tpm2 |& tee enrollment.log",
         [
