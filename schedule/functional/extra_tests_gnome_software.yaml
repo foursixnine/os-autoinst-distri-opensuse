@@ -1,0 +1,5 @@
+name:           extra_tests_gnome_software
+description:    >
+    Test booting to automatically created snapshots.
+schedule:
+    - boot/boot_to_desktop
