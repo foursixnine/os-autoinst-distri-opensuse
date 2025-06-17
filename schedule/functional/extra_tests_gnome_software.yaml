@@ -3,3 +3,4 @@ description:    >
     Test booting to automatically created snapshots.
 schedule:
     - boot/boot_to_desktop
+    - x11/myrlyn
