@@ -1,3 +1,11 @@
+# SUSE's openQA tests
+#
+# Copyright SUSE LLC
+# SPDX-License-Identifier: FSFAP
+
+# Summary: Test that myrlyn is able to start
+# Maintainer: santiago.zarate@suse.com
+
 use base "x11test";
 use strict;
 use warnings;
