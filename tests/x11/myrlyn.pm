@@ -11,8 +11,14 @@ sub run {
     send_key 'alt-f4';
 
     # now start myrlyn in rw
-    x11_start_program('xdg-su -c myrlyn');
+    x11_start_program('xdg-su -c myrlyn', target_match => 'root-auth-dialog');
+    type_password;
+    send_key 'ret';
+
+    # verify that myrlyn has started
+    assert_screen('myrlyn');
     send_key 'alt-f4';
+
 }
 
 1;
