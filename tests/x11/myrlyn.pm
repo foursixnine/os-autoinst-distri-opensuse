@@ -11,7 +11,7 @@ sub run {
     send_key 'alt-f4';
 
     # now start myrlyn in rw
-    x11_start_program('myrlyn-sudo', target_match => 'root-auth-dialog');
+    x11_start_program('myrlyn-sudo', target_match => 'myrlyn-askpass');
     type_password;
     send_key 'ret';
 
