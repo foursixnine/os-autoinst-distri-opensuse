@@ -17,7 +17,7 @@ jobs:
           - test: compile
             perl-version: 5.26
     container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
+      image: perldocker/perl-tester:${{ matrix.perl-version }}-bookworm
     steps:
     - uses: actions/checkout@v4
     - name: Install dependencies
