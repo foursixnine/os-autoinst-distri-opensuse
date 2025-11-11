@@ -77,7 +77,13 @@ sub run {
     # close yast
     wait_screen_change { send_key "alt-o" };
 
-    send_key_until_needlematch('generic-desktop', 'alt-f4', 5, 10);
+    send_key_until_needlematch([qw(terminal-close-window generic-desktop)], 'alt-f4', 5, 10);
+
+    if (match_has_tag('terminal-close-window')) {
+        click_lastmatch;
+        assert_screen 'generic-desktop';
+    }
+
     select_console("root-console");
     send_key "ctrl-c";
     clear_console;
