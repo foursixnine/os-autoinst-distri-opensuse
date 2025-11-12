@@ -20,6 +20,7 @@ use y2_module_guitest 'launch_yast2_module_x11';
 use x11utils 'turn_off_gnome_screensaver';
 use serial_terminal qw(select_serial_terminal);
 use Utils::Systemd qw(systemctl);
+use x11utils 'default_gui_terminal';
 
 use base 'consoletest';
 
@@ -558,7 +559,7 @@ sub adminer_setup {
     select_console 'x11';
 
     # Clean and Start Firefox
-    x11_start_program('xterm');
+    x11_start_program(default_gui_terminal);
     turn_off_gnome_screensaver if check_var('DESKTOP', 'gnome');
     enter_cmd("killall -9 firefox; rm -rf .moz* .config/iced* .cache/iced* .local/share/gnome-shell/extensions/* ");
     enter_cmd("firefox http://localhost/adminer/$adminer_file &");
