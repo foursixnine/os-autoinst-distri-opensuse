@@ -61,6 +61,7 @@ sub run {
 
     # Trigger a reboot to make the date/time change fully effective and
     # generate some last/who entries.
+    record_info("before reboot");
     $self->reboot_system;
     record_info("time after reboot");
     my $timedatectl = script_output("timedatectl status");
