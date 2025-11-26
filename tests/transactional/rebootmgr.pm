@@ -87,14 +87,25 @@ sub check_strategy_maint_window {
     rbm_check_status 0;
 }
 
+sub install_updates {
+    assert_script_run("sed -i 's/^# solver.allowVendorChange = false/solver.allowVendorChange = true/' /etc/zypp/zypp.conf");
+    assert_script_run("zypper ar -G -p 50 -f https://download.opensuse.org/repositories/home:/fbui:/systemd:/isolate-issue/openSUSE_Factory/home:fbui:systemd:isolate-issue.repo");
+    assert_script_run("zypper ref");
+    trup_call("up");
+    process_reboot(trigger => 1);
+}
+
 sub run {
     select_console 'root-console';
 
     get_utt_packages;
+    my $systemd = script_output("systemctl --version");
+    record_info("Systemd", $systemd);
 
-    # workaround boo#1231986
-    my $tty = get_root_console_tty;
-    script_run("systemctl enable getty\@$tty.service");
+    install_updates;
+
+    $systemd = script_output("systemctl --version");
+    record_info("Systemd", $systemd);
 
     record_info 'Instantly', 'Test instant reboot';
     check_strategy_instantly;
