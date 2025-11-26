@@ -92,6 +92,10 @@ sub run {
 
     get_utt_packages;
 
+    # workaround boo#1231986
+    my $tty = get_root_console_tty;
+    script_run("systemctl enable getty\@$tty.service");
+
     record_info 'Instantly', 'Test instant reboot';
     check_strategy_instantly;
 
