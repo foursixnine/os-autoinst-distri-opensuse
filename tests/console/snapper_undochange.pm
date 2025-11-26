@@ -18,10 +18,23 @@
 
 use base 'btrfs_test';
 use testapi;
+use power_action_utils 'power_action';
+
+sub install_updates {
+    assert_script_run("sed -i 's/^# solver.allowVendorChange = false/solver.allowVendorChange = true/' /etc/zypp/zypp.conf");
+    assert_script_run("zypper ar -G -p 50 -f https://download.opensuse.org/repositories/home:/fbui:/systemd:/isolate-issue/openSUSE_Factory/home:fbui:systemd:isolate-issue.repo");
+    assert_script_run("zypper ref");
+    zypper_call("up");
+    power_action('reboot');
+    $self->wait_boot(bootloader_time => 200);
+    select_console 'root-console';
+}
 
 sub run {
     my ($self) = @_;
     select_console 'root-console';
+
+    install_updates;
 
     my $snapfile = '/etc/snapfile';
     my @snapper_runs = 'snapper';

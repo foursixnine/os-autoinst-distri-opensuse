@@ -79,9 +79,6 @@ sub snapper_nodbus_restore {
     my $ret = script_run('systemctl is-active dbus', timeout => 300);
     die 'DBus service should be inactive, but it is active' if ($ret == 0);
 
-    # workaround bsc#1231986 by enabling the tty before switching to default target
-    script_run('systemctl enable getty@tty6.service') if (is_jeos && is_opensuse);
-
     script_run('systemctl default', timeout => 600);
     my $tty = get_root_console_tty;
 
