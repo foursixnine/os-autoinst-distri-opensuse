@@ -99,12 +99,12 @@ sub run {
     select_console 'root-console';
 
     get_utt_packages;
-    my $systemd = script_output("systemctl --version");
+    my $systemd = script_output("rpm -q systemd");
     record_info("Systemd", $systemd);
 
     install_updates;
 
-    $systemd = script_output("systemctl --version");
+    $systemd = script_output("rpm -q systemd");
     record_info("Systemd", $systemd);
 
     record_info 'Instantly', 'Test instant reboot';
