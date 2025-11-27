@@ -89,6 +89,8 @@ sub check_strategy_maint_window {
 }
 
 sub install_updates {
+    assert_script_run("echo 'PermitRootLogin yes' > /etc/ssh/sshd_config.d/root.conf");
+    assert_script_run("systemctl restart sshd");
     assert_script_run("sed -i 's/^# solver.allowVendorChange = false/solver.allowVendorChange = true/' /etc/zypp/zypp.conf");
     assert_script_run("zypper ar -G -p 50 -f https://download.opensuse.org/repositories/home:/fbui:/systemd:/isolate-issue/openSUSE_Factory/home:fbui:systemd:isolate-issue.repo");
     assert_script_run("zypper ref");
