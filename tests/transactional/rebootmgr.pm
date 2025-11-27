@@ -14,6 +14,7 @@ use transactional;
 use utils;
 use version_utils 'is_tumbleweed';
 use Utils::Backends 'is_pvm';
+use bootloader_setup 'add_grub_cmdline_settings';
 
 # Optionally skip exit status check in case immediate reboot is expected
 sub rbm_call {
@@ -92,6 +93,7 @@ sub install_updates {
     assert_script_run("zypper ar -G -p 50 -f https://download.opensuse.org/repositories/home:/fbui:/systemd:/isolate-issue/openSUSE_Factory/home:fbui:systemd:isolate-issue.repo");
     assert_script_run("zypper ref");
     trup_call("up");
+    add_grub_cmdline_settings('systemd.debug_shell', update_grub => 1);
     process_reboot(trigger => 1);
 }
 
