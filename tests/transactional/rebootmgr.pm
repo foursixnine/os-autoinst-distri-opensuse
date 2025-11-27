@@ -93,8 +93,14 @@ sub install_updates {
     assert_script_run("zypper ar -G -p 50 -f https://download.opensuse.org/repositories/home:/fbui:/systemd:/isolate-issue/openSUSE_Factory/home:fbui:systemd:isolate-issue.repo");
     assert_script_run("zypper ref");
     trup_call("up");
+    process_reboot(trigger => 1);
+
     add_grub_cmdline_settings('systemd.debug_shell', update_grub => 1);
     process_reboot(trigger => 1);
+    my $cmdline = script_output("cat /proc/cmdline");
+    record_info("cmdline", $cmdline);
+    assert_script_run("grep systemd.debug_shell /boot/efi/loader/entries/opensuse-microos-*-*.conf");
+    assert_script_run("sdbootutil get-default");
 }
 
 sub run {
