@@ -92,6 +92,7 @@ sub process_reboot {
     # Switch to root-console as we need VNC to check for grub and for login prompt
     my $prev_console = current_console();
     select_console 'root-console', await_console => 0 unless ($prev_console eq 'root-console');
+    record_info("At $prev_console");
 
     handle_first_grub if ($args{automated_rollback});
 
