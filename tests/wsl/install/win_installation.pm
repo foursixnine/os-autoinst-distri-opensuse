@@ -56,7 +56,7 @@ sub run {
             }
         }
     );
-    $self->run_in_powershell(cmd => 'Get-LocalUser | Set-LocalUser -PasswordNeverExpires $true');
+
     $self->run_in_powershell(
         cmd => '$port.WriteLine($(Get-LocalUser | Where-Object { $_.Enabled } | Select Name,PasswordExpires))',
         code => sub {
