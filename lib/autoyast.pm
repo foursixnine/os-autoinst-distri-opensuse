@@ -787,7 +787,9 @@ sub expand_agama_secrets {
 sub expand_agama_profile {
     my ($profile, $profile_expanded) = @_;
     $profile_expanded //= $profile;
-    my $content = expand_variables(expand_agama_secrets(expand_version(get_test_data($profile))));
+    my $file_contents = get_test_data($profile);
+    die "Could not find $profile" unless $file_contents;
+    my $content = expand_variables(expand_agama_secrets(expand_version($file_contents)));
     save_tmp_file($profile_expanded, $content);
     my $profile_url = autoinst_url . "/files/$profile_expanded";
     upload_profile(path => $profile_expanded, profile => $content);
