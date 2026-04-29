@@ -5,16 +5,6 @@
 # Maintainer: QE Installation and Migration (QE Iam) <none@suse.de>
 
 package Yam::Agama::patch_agama_base;
-use base 'opensusebasetest';
-use strict;
-use warnings;
-use testapi;
-use y2_base 'save_upload_y2logs';
-
-sub post_fail_hook {
-    my ($self) = @_;
-    select_console 'install-shell';
-    y2_base::save_upload_y2logs($self, skip_logs_investigation => 1);
-}
+use Mojo::Base 'Yam::Agama::agama_base';
 
 1;
