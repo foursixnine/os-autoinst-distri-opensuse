@@ -17,9 +17,7 @@ use Mojo::Base 'Yam::Agama::agama_base';
 use testapi;
 use version_utils qw(is_leap is_sle is_microos);
 use utils;
-use Utils::Logging qw(export_healthcheck_basic);
 use Utils::Architectures;
-use x11utils 'ensure_unlocked_desktop';
 
 sub scroll_down {
     # We need to click on an empty space so we can press arrow down
@@ -200,6 +198,213 @@ sub agama_lvm_setup {
     send_key_until_needlematch('agama-lvm-proposal', 'ctrl-down');
 }
 
+sub agama_raid_setup {
+    # assert_and_click('agma-storage-tab');
+    # assert_and_click('agma-storage-more-devices');
+    # assert_and_click('agma-storage-select-another-device');
+    # assert_and_click('agma-storage-raid-tab');
+    # assert_and_click('agma-storage-raid-md0');
+    # wait_still_screen 5;
+
+    # assert_and_click('agma-storage-more-devices');
+    # assert_and_click('agma-storage-select-another-device');
+    # assert_and_click('agma-storage-raid-tab');
+    # assert_and_click('agma-storage-raid-md1');
+    # wait_still_screen 5;
+
+    # assert_and_click('agma-storage-vda-select');
+    # assert_and_click('agma-storage-vda-do-not-use');
+    # wait_still_screen 5;
+
+    # assert_and_click('agma-storage-more-devices');
+    # assert_and_click('agma-storage-select-another-device');
+    # assert_and_click('agma-storage-vda-add');
+    # wait_still_screen 5;
+
+    # send_key 'shift-tab';
+    # send_key 'shift-tab';
+
+    # assert_and_click('agama-storage-vda-not-configured');
+    # assert_and_click('agama-storage-vda-configure-partition');
+
+    # send_key 'tab' for (0 .. 7); # get to mount point
+    # type_string '/boot';
+    # send_key 'tab'; # Partition combo
+    # send_key 'spc'; # Show options
+    # send_key 'down' for (0 .. 3);
+    # assert_and_click('agama-user-accept-button');
+    # wait_still_screen 5;
+
+    # send_key 'shift-tab';
+    # send_key 'shift-tab'; # content will be deleted
+
+    # send_key 'spc'
+    # send_key 'down' for (0 .. 2);
+    # send_key 'ret';
+
+    # # Keep vda1 and vda4 for /boot/efi and /boot respectively
+    # # assert_and_click('agma-storage-vda-partitions-content');
+    # # assert_and_click('agma-storage-vda-partitions-custom');
+
+    # send_key 'tab' for (0 .. 7); # vda1 - 'Do not modify'
+    # send_key 'spc';
+    # send_key 'tab' for (0 .. 2); # vda2 - 'Do not modify'
+    # send_key 'spc';
+    # send_key 'tab' for (0 .. 2); # vda3 - 'Do not modify'
+    # send_key 'spc';
+    # send_key 'tab' for (0 .. 2); # vda4 - 'Do not modify'
+    # send_key 'spc';
+
+    # assert_screen('agama-storage-vda-do-not-modify');
+
+    # send_key 'tab' for (0 .. 2); # vda4 - 'Do not modify'
+    # send_key 'ret'; # accept changes
+
+    # # add /boot/efi
+    # send_key 'shift-tab';
+    # send_key 'shift-tab';
+    # send_key 'shift-tab'; # Existing partition...
+
+    # send_key 'spc';
+
+    # send_key 'tab';
+    # send_key 'tab';
+    # send_key 'ret'; # Enter configure partition
+
+    # assert_and_click('agma-storage-configure-raid-md0');
+    # assert_and_click('agma-storage-add-or-use-partition');
+
+    # send_key 'tab' for (0 .. 7); # get to mount point
+    # type_string '/';
+    # assert_and_click('agama-user-accept-button');
+    # wait_still_screen 5;
+
+    # assert_and_click('agma-storage-configure-raid-md1');
+    # assert_and_click('agma-storage-add-or-use-partition');
+
+    # send_key 'tab' for (0 .. 7); # get to mount point
+    # type_string '/';
+    # assert_and_click('agama-user-accept-button');
+    # wait_still_screen 5;
+
+    ### maybe first flow
+    assert_and_click('agma-storage-settings');
+    send_key 'tab' for (0 .. 6);    # New partitions...
+    send_key 'spc';    # expand menu
+
+    send_key 'tab';    # /
+    send_key 'spc';    # activate combo
+    send_key 'down';
+    send_key 'spc';    # select delete
+
+    wait_still_screen 5;
+
+    assert_and_click('agma-storage-settings');
+    send_key 'tab' for (0 .. 7);    # moves to swap...
+
+    send_key 'spc';    # activate combo
+    send_key 'down';
+    send_key 'spc';    # select delete
+
+    assert_and_click('agama-storage-vda-not-configured');
+    assert_and_click('agama-storage-vda-configure-partition');
+
+    # add /boot
+    send_key 'tab' for (0 .. 7);    # get to mount point
+    type_string '/boot';
+    send_key 'tab';    # go back to focus on the field, workaround UX bug
+    type_string '/boot';
+    send_key 'tab';    # Partition combo
+    send_key 'spc';    # Show options
+    send_key 'down' for (0 .. 3);
+    send_key 'spc';    # Accept vda4
+    assert_and_click('agama-user-accept-button');
+    wait_still_screen 5;
+
+    assert_and_click('agama-storage-partition-add-or-use');
+
+    # add /boot/efi
+    send_key 'tab' for (0 .. 7);    # get to mount point
+    type_string '/';
+    send_key 'tab';    # go back to focus on the field, workaround UX bug
+    type_string '/boot/efi';
+    send_key 'tab';    # Partition combo
+    send_key 'spc';    # Show options
+    send_key 'down';
+    send_key 'spc';    # accept vda1
+    send_key 'tab';    # go to filesystem
+    send_key 'spc';
+    send_key 'down' for (0 .. 5);    # FAT
+    send_key 'spc';    # accept
+    assert_and_click('agama-user-accept-button');
+    wait_still_screen 5;
+
+    # configure rest of partitions of vda
+    assert_and_click('agma-storage-settings');
+
+    send_key 'shift-tab' for (0 .. 9);    # goes to '... not configured... deleted'
+    send_key 'spc';
+    send_key 'down' for (0 .. 2);
+    send_key 'spc';    # select what to do
+
+    send_key 'tab' for (0 .. 7);    # vda1 - 'Do not modify'
+                                    # send_key 'spc'; not needed
+    send_key 'tab' for (0 .. 1);    # vda2 - 'Do not modify'
+    send_key 'spc';
+    send_key 'tab' for (0 .. 2);    # vda3 - 'Do not modify'
+    send_key 'spc';
+    send_key 'tab' for (0 .. 2);    # vda4 - 'Do not modify'
+    send_key 'tab' for (0 .. 1);    # Focus the accept button
+
+    assert_screen('agama-storage-vda-do-not-modify');
+
+    send_key 'ret';    # accept changes
+
+    # Add and configure md0
+    assert_and_click('agma-storage-settings');
+
+    send_key 'shift-tab' for (0 .. 8);    # goes to 'More devices'
+    send_key 'spc';
+    send_key 'spc';    # select existing device
+
+    assert_and_click('agma-storage-raid-tab');
+    assert_and_click('agma-storage-raid-md0');
+    wait_still_screen 5;
+
+    assert_and_click('agma-storage-settings');
+    send_key 'tab' for (0 .. 6);    # md0 is not configured yet
+    send_key 'spc';
+    send_key 'spc';    # add or use partition
+
+    send_key 'tab' for (0 .. 7);    # get to mount point
+    type_string '/';    # the UX bug is handy here :)
+    assert_and_click('agama-user-accept-button');
+    wait_still_screen 5;
+
+    # Add and configure md1
+    assert_and_click('agma-storage-settings');
+
+    # As the system's partition layout seems correct, there's now the result section
+    send_key 'shift-tab' for (0 .. 12);    # goes to 'More devices'
+    send_key 'spc';
+    send_key 'spc';    # select existing device
+
+    assert_and_click('agma-storage-raid-tab');
+    assert_and_click('agma-storage-raid-md1');
+    wait_still_screen 5;
+
+    send_key 'tab' for (0 .. 8);    # md1 is not configured yet
+    send_key 'spc';
+    send_key 'spc';    # add or use partition
+
+    send_key 'tab' for (0 .. 7);    # get to mount point
+    type_string 'swap';    # the UX bug is handy here :)
+    assert_and_click('agama-user-accept-button');
+    wait_still_screen 5;
+
+    back_to_overview;
+}
+
 sub select_product {
     # Product selection dialog scrolls with 4+ products at 1024x768.
     # As of now TW is the last item in the list, so we need to scroll a bit.
@@ -294,6 +499,10 @@ sub run {
     # Install additional patterns
     software_select_patterns();
     back_to_overview;
+
+    if (get_var('RAIDLEVEL')) {
+        agama_raid_setup();
+    }
 
     if (check_var('LVM', 1)) {
         agama_lvm_setup();
