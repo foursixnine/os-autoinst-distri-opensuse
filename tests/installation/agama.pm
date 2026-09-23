@@ -277,6 +277,11 @@ sub select_desktop_pattern {
 sub software_select_patterns {
     assert_and_click('agama-software-tab');
     wait_still_screen(5);
+
+    mouse_set(600, 600);
+    mouse_click;
+
+    send_key_until_needlematch('agama-software-selection', 'ctrl-down', 3);
     assert_and_click('agama-change-software-selection');
     wait_still_screen(5);
 
