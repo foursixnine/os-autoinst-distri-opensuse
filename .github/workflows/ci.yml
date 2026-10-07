@@ -34,6 +34,17 @@ jobs:
         apt-get -y install libdbus-1-dev libssh2-1-dev libxml2-dev parallel python3-dev python3-yaml python3-jsonnet python3-jsonschema liblua5.3-dev yamllint
         # FFI needs cargo (newer than the packaged version)
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    - name: Cache Perl dependencies
+      uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
+      with:
+        path: |
+          /usr/local/lib/perl5
+          /usr/local/share/perl
+          /usr/local/bin
+        # ci.yml is part of the key as it pins extra modules such as Perl::Tidy
+        key: ci-perl-${{ matrix.perl-version }}-${{ hashFiles('cpanfile', '.github/workflows/ci.yml') }}
+        restore-keys: |
+          ci-perl-${{ matrix.perl-version }}-
     - name: Setup perl
       env:
         INLINE_PYTHON_EXECUTABLE: /usr/bin/python3
