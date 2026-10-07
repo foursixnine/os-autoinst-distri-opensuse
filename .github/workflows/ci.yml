@@ -6,7 +6,7 @@ permissions:
 jobs:
   static:
     runs-on: ubuntu-latest
-    name: "CI: Running ${{ matrix.test }} tests with perl v${{ matrix.perl-version }}"
+    name: "CI: Running ${{ matrix.test }} tests${{ matrix.name-suffix }} with perl v${{ matrix.perl-version }}"
     strategy:
       fail-fast: false
       max-parallel: 6
@@ -20,6 +20,24 @@ jobs:
             perl-version: '5.40'
           - test: compile
             perl-version: '5.40'
+            shard: 0
+            shards: 4
+            name-suffix: ' (1/4)'
+          - test: compile
+            perl-version: '5.40'
+            shard: 1
+            shards: 4
+            name-suffix: ' (2/4)'
+          - test: compile
+            perl-version: '5.40'
+            shard: 2
+            shards: 4
+            name-suffix: ' (3/4)'
+          - test: compile
+            perl-version: '5.40'
+            shard: 3
+            shards: 4
+            name-suffix: ' (4/4)'
           - test: compile-os-autoinst
             perl-version: '5.40'
           - test: check-strict
@@ -62,6 +80,8 @@ jobs:
     - name: Run ${{ matrix.test }} tests
       env:
         TESTS: ${{ matrix.test }}
+        COMPILE_SHARD: ${{ matrix.shard || '0' }}
+        COMPILE_SHARDS: ${{ matrix.shards || '1' }}
       run: |
         # Work around https://github.com/actions/checkout/issues/766
         git config --global --add safe.directory "$GITHUB_WORKSPACE"

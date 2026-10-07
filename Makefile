@@ -48,9 +48,13 @@ tidy-full: tools/tidy
 unit-test:
 	prove -l -Ios-autoinst/ t/
 
+# Split test-compile across CI jobs via round-robin shards (0..COMPILE_SHARDS-1)
+COMPILE_SHARDS ?= 1
+COMPILE_SHARD ?= 0
+
 .PHONY: test-compile
 test-compile: check-links
-	export PERL5LIB=${PERL5LIB_}:$(shell ./tools/wheel --verify) ; ( git ls-files "*.pm" || find . -name \*.pm|grep -v /os-autoinst/ ) | parallel perl -c 2>&1 | grep -v " OK$$" && exit 2; true
+	export PERL5LIB=${PERL5LIB_}:$(shell ./tools/wheel --verify) ; ( git ls-files "*.pm" || find . -name \*.pm|grep -v /os-autoinst/ ) | awk '(NR - 1) % $(COMPILE_SHARDS) == $(COMPILE_SHARD)' | parallel perl -c 2>&1 | grep -v " OK$$" && exit 2; true
 
 .PHONY: test-compile-changed
 test-compile-changed: os-autoinst/
